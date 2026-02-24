@@ -1,4 +1,25 @@
-`timescale 1ns/1ps
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 02/22/2026 05:27:29 PM
+// Design Name: 
+// Module Name: pixel_generator
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
 module pixel_generator (
     input clk,  
     input reset,    
@@ -74,7 +95,6 @@ module pixel_generator (
         end
     
     // ball rom
-    //ball_rom ball(.addr(rom_addr), .data(rom_data));
     always @*
         case(rom_addr)
             3'b000 :    rom_data = 8'b00111100; //   ****  
@@ -86,7 +106,7 @@ module pixel_generator (
             3'b110 :    rom_data = 8'b01111110; //  ******
             3'b111 :    rom_data = 8'b00111100; //   ****
         endcase
-    
+  
     // OBJECT STATUS SIGNALS
     wire wall_on, pad_on, sq_ball_on, ball_on;
     wire [11:0] wall_rgb, pad_rgb, ball_rgb, bg_rgb;
