@@ -1,11 +1,32 @@
-`timescale 1ns/1ps
+`timescale 1ns / 1ps
+//////////////////////////////////////////////////////////////////////////////////
+// Company: 
+// Engineer: 
+// 
+// Create Date: 02/22/2026 04:51:00 PM
+// Design Name: 
+// Module Name: top
+// Project Name: 
+// Target Devices: 
+// Tool Versions: 
+// Description: 
+// 
+// Dependencies: 
+// 
+// Revision:
+// Revision 0.01 - File Created
+// Additional Comments:
+// 
+//////////////////////////////////////////////////////////////////////////////////
+
+
 module top (
     input clk_100Mhz,
     input reset,
     input up,
     input down,
-    output h_sync,
-    output v_sync,
+    output hsync,
+    output vsync,
     output [11:0] rgb
 );
     
@@ -14,19 +35,19 @@ module top (
     reg [11:0] rgb_reg;
     wire [11:0] rgb_next;
     
-    //vga controller
-    vga_controller vga(.clk_100MHz(clk_100MHz), .reset(w_reset), .video_on(w_vid_on),
-                       .hsync(hsync), .vsync(vsync), .p_tick(w_p_tick), .x(w_x), .y(w_y));
-    // pixel generator
-    pixel_gen pg(.clk(clk_100MHz), .reset(w_reset), .up(w_up), .down(w_down), 
-                 .video_on(w_vid_on), .x(w_x), .y(w_y), .rgb(rgb_next));
     // buttons                 
-    debounce dbR(.clk(clk_100MHz), .btn_in(reset), .btn_out(w_reset));
-    debounce dbU(.clk(clk_100MHz), .btn_in(up), .btn_out(w_up));
-    debounce dbD(.clk(clk_100MHz), .btn_in(down), .btn_out(w_down));
+    debounce debounceR(.clk(clk_100Mhz), .btn(reset), .db_level(w_reset));
+    debounce debounceU(.clk(clk_100Mhz), .btn(up), .db_level(w_up));
+    debounce debounceD(.clk(clk_100Mhz), .btn(down), .db_level(w_down));
+    
+    //vga controller
+    vga_controller vga(.clk_100Mhz(clk_100Mhz), .reset(w_reset), .hsync(hsync), .vsync(vsync), .video_on(w_vid_on), .p_tick(w_p_tick), .x(w_x), .y(w_y));
+    
+    // pixel generator
+    pixel_generator pixel_gen(.clk(clk_100Mhz), .reset(w_reset), .up(w_up), .down(w_down), .video_on(w_vid_on), .x(w_x), .y(w_y), .rgb(rgb_next));
     
     // rgb buffer
-    always @(posedge clk_100MHz)
+    always @(posedge clk_100Mhz)
         if(w_p_tick)
             rgb_reg <= rgb_next;
             
